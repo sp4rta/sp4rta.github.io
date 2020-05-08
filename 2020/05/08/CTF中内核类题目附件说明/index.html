@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="CTF比赛中的内核题目通常会由以下几部分组成：  qemu-system 启动脚本（通常叫start.sh或者boot.sh） rootfs.cpio 虚拟机的文件系统 bzImage 内核镜像  qemu-system 启动脚本用于启动内核虚拟机的shell脚本，因为qemu是通过参数控制配置信息的，参数较多，所以会提供脚本。下面来分析一每个参数的意义： 123456789101112#!&amp;#x">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTF中内核类题目附件说明">
+<meta property="og:url" content="http://startpwn.top/2020/05/08/CTF%E4%B8%AD%E5%86%85%E6%A0%B8%E7%B1%BB%E9%A2%98%E7%9B%AE%E9%99%84%E4%BB%B6%E8%AF%B4%E6%98%8E/index.html">
+<meta property="og:site_name" content="Sp4rta&#39;s blog">
+<meta property="og:description" content="CTF比赛中的内核题目通常会由以下几部分组成：  qemu-system 启动脚本（通常叫start.sh或者boot.sh） rootfs.cpio 虚拟机的文件系统 bzImage 内核镜像  qemu-system 启动脚本用于启动内核虚拟机的shell脚本，因为qemu是通过参数控制配置信息的，参数较多，所以会提供脚本。下面来分析一每个参数的意义： 123456789101112#!&amp;#x">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-05-08T06:05:49.000Z">
+<meta property="article:modified_time" content="2020-05-08T07:01:05.753Z">
+<meta property="article:author" content="ssta">
+<meta property="article:tag" content="pwn">
+<meta property="article:tag" content="kernel">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>CTF中内核类题目附件说明</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/Links/">Links</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2020/05/06/linux-kernel-basics/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://startpwn.top/2020/05/08/CTF%E4%B8%AD%E5%86%85%E6%A0%B8%E7%B1%BB%E9%A2%98%E7%9B%AE%E9%99%84%E4%BB%B6%E8%AF%B4%E6%98%8E/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://startpwn.top/2020/05/08/CTF%E4%B8%AD%E5%86%85%E6%A0%B8%E7%B1%BB%E9%A2%98%E7%9B%AE%E9%99%84%E4%BB%B6%E8%AF%B4%E6%98%8E/&text=CTF中内核类题目附件说明" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://startpwn.top/2020/05/08/CTF%E4%B8%AD%E5%86%85%E6%A0%B8%E7%B1%BB%E9%A2%98%E7%9B%AE%E9%99%84%E4%BB%B6%E8%AF%B4%E6%98%8E/&title=CTF中内核类题目附件说明" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://startpwn.top/2020/05/08/CTF%E4%B8%AD%E5%86%85%E6%A0%B8%E7%B1%BB%E9%A2%98%E7%9B%AE%E9%99%84%E4%BB%B6%E8%AF%B4%E6%98%8E/&is_video=false&description=CTF中内核类题目附件说明" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=CTF中内核类题目附件说明&body=Check out this article: http://startpwn.top/2020/05/08/CTF%E4%B8%AD%E5%86%85%E6%A0%B8%E7%B1%BB%E9%A2%98%E7%9B%AE%E9%99%84%E4%BB%B6%E8%AF%B4%E6%98%8E/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://startpwn.top/2020/05/08/CTF%E4%B8%AD%E5%86%85%E6%A0%B8%E7%B1%BB%E9%A2%98%E7%9B%AE%E9%99%84%E4%BB%B6%E8%AF%B4%E6%98%8E/&title=CTF中内核类题目附件说明" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://startpwn.top/2020/05/08/CTF%E4%B8%AD%E5%86%85%E6%A0%B8%E7%B1%BB%E9%A2%98%E7%9B%AE%E9%99%84%E4%BB%B6%E8%AF%B4%E6%98%8E/&title=CTF中内核类题目附件说明" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://startpwn.top/2020/05/08/CTF%E4%B8%AD%E5%86%85%E6%A0%B8%E7%B1%BB%E9%A2%98%E7%9B%AE%E9%99%84%E4%BB%B6%E8%AF%B4%E6%98%8E/&title=CTF中内核类题目附件说明" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://startpwn.top/2020/05/08/CTF%E4%B8%AD%E5%86%85%E6%A0%B8%E7%B1%BB%E9%A2%98%E7%9B%AE%E9%99%84%E4%BB%B6%E8%AF%B4%E6%98%8E/&title=CTF中内核类题目附件说明" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://startpwn.top/2020/05/08/CTF%E4%B8%AD%E5%86%85%E6%A0%B8%E7%B1%BB%E9%A2%98%E7%9B%AE%E9%99%84%E4%BB%B6%E8%AF%B4%E6%98%8E/&name=CTF中内核类题目附件说明&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=http://startpwn.top/2020/05/08/CTF%E4%B8%AD%E5%86%85%E6%A0%B8%E7%B1%BB%E9%A2%98%E7%9B%AE%E9%99%84%E4%BB%B6%E8%AF%B4%E6%98%8E/&t=CTF中内核类题目附件说明" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#qemu-system-启动脚本"><span class="toc-number">1.</span> <span class="toc-text">qemu-system 启动脚本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#rootfs-cpio-虚拟文件系统"><span class="toc-number">2.</span> <span class="toc-text">rootfs.cpio 虚拟文件系统</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#bzImage内核镜像"><span class="toc-number">3.</span> <span class="toc-text">bzImage内核镜像</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        CTF中内核类题目附件说明
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Sp4rta's blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-05-08T06:05:49.000Z" itemprop="datePublished">2020-05-08</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/kernel/" rel="tag">kernel</a>, <a class="tag-link" href="/tags/pwn/" rel="tag">pwn</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>CTF比赛中的内核题目通常会由以下几部分组成：</p>
+<ul>
+<li>qemu-system 启动脚本（通常叫start.sh或者boot.sh）</li>
+<li>rootfs.cpio 虚拟机的文件系统</li>
+<li>bzImage 内核镜像</li>
+</ul>
+<h4 id="qemu-system-启动脚本"><a href="#qemu-system-启动脚本" class="headerlink" title="qemu-system 启动脚本"></a>qemu-system 启动脚本</h4><p>用于启动内核虚拟机的shell脚本，因为qemu是通过参数控制配置信息的，参数较多，所以会提供脚本。下面来分析一每个参数的意义：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;bash</span><br><span class="line"></span><br><span class="line">qemu-system-x86_64 \</span><br><span class="line">		-initrd rootfs.cpio \ 	# 使用 rootfs.cpio 作为内核启动的文件系统</span><br><span class="line">    -kernel bzImage \  			# 使用 bzImage 作为 kernel 映像</span><br><span class="line">    -append &#39;console&#x3D;ttyS0 root&#x3D;&#x2F;dev&#x2F;ram oops&#x3D;panic panic&#x3D;1&#39; \ # 配置信息 （开启kaslr会写在这） </span><br><span class="line">    -enable-kvm \						# 使用 KVM 进行加速</span><br><span class="line">    -monitor &#x2F;dev&#x2F;null \</span><br><span class="line">    -m 64M \								# 设置运行内存为64M</span><br><span class="line">    --nographic  \</span><br><span class="line">    -smp cores&#x3D;1,threads&#x3D;1 \# 设置 CPU 配置 单核单线程</span><br><span class="line">    -cpu kvm64,+smep				# 设置 CPU 的安全选项，这里开启了 smep</span><br></pre></td></tr></table></figure>
+
+<h4 id="rootfs-cpio-虚拟文件系统"><a href="#rootfs-cpio-虚拟文件系统" class="headerlink" title="rootfs.cpio 虚拟文件系统"></a>rootfs.cpio 虚拟文件系统</h4><p>由cpio打包而成的文件，通常还会用gzip压缩一次。下面介绍一下cpio命令：</p>
+<p><strong>打包</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . | cpio --null -ov --format=newc &gt; rootfs.cpio</span><br></pre></td></tr></table></figure>
+
+<p>参数说明：</p>
+<ul>
+<li>–null  解析空字符串’’\0’</li>
+<li>-o：(–create)指定运行为copy-out模式，即归档模式</li>
+<li>-v：给出详细信息</li>
+<li>-H FORMAT, –format=FORMAT 使用归档格式 FORMAT。</li>
+</ul>
+<p><strong>解包</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cpio -idmv &gt; core.cpio</span><br></pre></td></tr></table></figure>
+<p>参数说明：</p>
+<ul>
+<li>-i：(–extract)指定运行为copy-in模式，即提取模式</li>
+<li>-d：(-make-directories)当需要的时候自动创建目录</li>
+<li>-m：(–preserve-modification-time)保留文件的原始mtime</li>
+<li>-v：给出详细信息</li>
+</ul>
+<blockquote>
+<p>解包出来的文件会包含一个”.ko”格式的文件，这个文件就是我们需要pwn掉的内核模块！</p>
+<p>还会包含一个init文件，是系统开机时的初始化文件。我们可以关掉poweroff命令的定时关机，否则可能会影响到我们调试，在有必要时还可以将权限改成root方便调试。</p>
+</blockquote>
+<h4 id="bzImage内核镜像"><a href="#bzImage内核镜像" class="headerlink" title="bzImage内核镜像"></a>bzImage内核镜像</h4><p>里面包含了编译好的内核 vmlinux，可用<a href="https://github.com/torvalds/linux/blob/master/scripts/extract-vmlinux" target="_blank" rel="noopener">extract-vmlinux</a> 脚本进行提取</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ssta@E4x:/pwn/kernel/ciscn2017_babydriver/<span class="built_in">test</span>$ ls</span><br><span class="line">bzImage  extract-vminux.sh</span><br><span class="line">ssta@E4x:/pwn/kernel/ciscn2017_babydriver/<span class="built_in">test</span>$ ./extract-vminux.sh bzImage &gt; vmlinux</span><br><span class="line">ssta@E4x:/pwn/kernel/ciscn2017_babydriver/<span class="built_in">test</span>$ ls</span><br><span class="line">bzImage  extract-vminux.sh  vmlinux</span><br><span class="line">ssta@E4x:/pwn/kernel/ciscn2017_babydriver/<span class="built_in">test</span>$ file vmlinux </span><br><span class="line">vmlinux: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, BuildID[sha1]=e993ea9809ee28d059537a0d5e866794f27e33b4, stripped</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>vmlinux中可以提取出解题需要的gadgets</p>
+</blockquote>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/Links/">Links</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#qemu-system-启动脚本"><span class="toc-number">1.</span> <span class="toc-text">qemu-system 启动脚本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#rootfs-cpio-虚拟文件系统"><span class="toc-number">2.</span> <span class="toc-text">rootfs.cpio 虚拟文件系统</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#bzImage内核镜像"><span class="toc-number">3.</span> <span class="toc-text">bzImage内核镜像</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://startpwn.top/2020/05/08/CTF%E4%B8%AD%E5%86%85%E6%A0%B8%E7%B1%BB%E9%A2%98%E7%9B%AE%E9%99%84%E4%BB%B6%E8%AF%B4%E6%98%8E/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://startpwn.top/2020/05/08/CTF%E4%B8%AD%E5%86%85%E6%A0%B8%E7%B1%BB%E9%A2%98%E7%9B%AE%E9%99%84%E4%BB%B6%E8%AF%B4%E6%98%8E/&text=CTF中内核类题目附件说明" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://startpwn.top/2020/05/08/CTF%E4%B8%AD%E5%86%85%E6%A0%B8%E7%B1%BB%E9%A2%98%E7%9B%AE%E9%99%84%E4%BB%B6%E8%AF%B4%E6%98%8E/&title=CTF中内核类题目附件说明" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://startpwn.top/2020/05/08/CTF%E4%B8%AD%E5%86%85%E6%A0%B8%E7%B1%BB%E9%A2%98%E7%9B%AE%E9%99%84%E4%BB%B6%E8%AF%B4%E6%98%8E/&is_video=false&description=CTF中内核类题目附件说明" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=CTF中内核类题目附件说明&body=Check out this article: http://startpwn.top/2020/05/08/CTF%E4%B8%AD%E5%86%85%E6%A0%B8%E7%B1%BB%E9%A2%98%E7%9B%AE%E9%99%84%E4%BB%B6%E8%AF%B4%E6%98%8E/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://startpwn.top/2020/05/08/CTF%E4%B8%AD%E5%86%85%E6%A0%B8%E7%B1%BB%E9%A2%98%E7%9B%AE%E9%99%84%E4%BB%B6%E8%AF%B4%E6%98%8E/&title=CTF中内核类题目附件说明" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://startpwn.top/2020/05/08/CTF%E4%B8%AD%E5%86%85%E6%A0%B8%E7%B1%BB%E9%A2%98%E7%9B%AE%E9%99%84%E4%BB%B6%E8%AF%B4%E6%98%8E/&title=CTF中内核类题目附件说明" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://startpwn.top/2020/05/08/CTF%E4%B8%AD%E5%86%85%E6%A0%B8%E7%B1%BB%E9%A2%98%E7%9B%AE%E9%99%84%E4%BB%B6%E8%AF%B4%E6%98%8E/&title=CTF中内核类题目附件说明" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://startpwn.top/2020/05/08/CTF%E4%B8%AD%E5%86%85%E6%A0%B8%E7%B1%BB%E9%A2%98%E7%9B%AE%E9%99%84%E4%BB%B6%E8%AF%B4%E6%98%8E/&title=CTF中内核类题目附件说明" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://startpwn.top/2020/05/08/CTF%E4%B8%AD%E5%86%85%E6%A0%B8%E7%B1%BB%E9%A2%98%E7%9B%AE%E9%99%84%E4%BB%B6%E8%AF%B4%E6%98%8E/&name=CTF中内核类题目附件说明&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=http://startpwn.top/2020/05/08/CTF%E4%B8%AD%E5%86%85%E6%A0%B8%E7%B1%BB%E9%A2%98%E7%9B%AE%E9%99%84%E4%BB%B6%E8%AF%B4%E6%98%8E/&t=CTF中内核类题目附件说明" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2019-2020
+    ssta
+    <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener" >津ICP备20002899号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/Links/">Links</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
