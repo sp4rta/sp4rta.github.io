@@ -14,7 +14,7 @@
 <meta property="og:description" content="CTF比赛中的内核题目通常会由以下几部分组成：  qemu-system 启动脚本（通常叫start.sh或者boot.sh） rootfs.cpio 虚拟机的文件系统 bzImage 内核镜像  qemu-system 启动脚本用于启动内核虚拟机的shell脚本，因为qemu是通过参数控制配置信息的，参数较多，所以会提供脚本。下面来分析一每个参数的意义： 123456789101112#!&amp;#x">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-05-08T06:05:49.000Z">
-<meta property="article:modified_time" content="2020-05-08T07:01:05.753Z">
+<meta property="article:modified_time" content="2021-03-24T12:17:42.846Z">
 <meta property="article:author" content="ssta">
 <meta property="article:tag" content="pwn">
 <meta property="article:tag" content="kernel">
@@ -174,7 +174,7 @@
 <li>-H FORMAT, –format=FORMAT 使用归档格式 FORMAT。</li>
 </ul>
 <p><strong>解包</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cpio -idmv &gt; core.cpio</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cpio -idmv &lt; core.cpio</span><br></pre></td></tr></table></figure>
 <p>参数说明：</p>
 <ul>
 <li>-i：(–extract)指定运行为copy-in模式，即提取模式</li>
@@ -253,7 +253,7 @@
     Copyright &copy;
     
     
-    2019-2020
+    2019-2021
     ssta
     <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener" >津ICP备20002899号</a>
   </div>
